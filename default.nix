@@ -23,6 +23,7 @@ pkgs.llvmPackages.stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "c-flake";
+    mainProgram = "cflake";
     licencse = licenses.wtfpl;
     platforms = with platforms; linux ++ darwin;
   };

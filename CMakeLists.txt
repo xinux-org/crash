@@ -15,4 +15,4 @@ add_executable(cflake ${SOURCE})
 
 set(CMAKE_BUILD_TYPE Debug)
 
-install(TARGETS sabine DESTINATION bin)
+install(TARGETS cflake DESTINATION bin)
