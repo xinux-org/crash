@@ -27,12 +27,9 @@ flake: {
     systemd.services."${manifest.name}" = {
       description = "${manifest.name} daemon";
       wantedBy = ["multi-user.target"];
-      serviceConfig = {
-        ExecStart = "${lib.getBin cfg.package}/bin/cflake";
-        # ExecStart = "${lib.getBin fpkg}/bin/cflake";
+        ExecStart = "${lib.getBin fpkg}/bin/cflake";
 
         Restart = "once";
-      };
     };
   };
 
