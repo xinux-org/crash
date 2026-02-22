@@ -18,7 +18,7 @@
         "aarch64-darwin"
       ];
 
-      flake.nixosModules.CCrashed = import ./modules/app.nix self;
+      flake.nixosModules.CCrashed = import ./modules/crash.nix self;
       perSystem =
         { system, pkgs, ... }:
         {
