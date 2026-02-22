@@ -28,7 +28,9 @@ flake: {
       description = "${manifest.name} daemon";
       wantedBy = ["multi-user.target"];
       serviceConfig = {
-        ExecStart = "${lib.getBin cfg.package}/bin/C-flake -g'app, ${lib.escapeShellArg cfg.greeter}!'";
+        # ExecStart = "${lib.getBin cfg.package}/bin/C-flake -g'app, ${lib.escapeShellArg cfg.greeter}!'";
+        ExecStart = "${lib.getBin fpkg}/bin/cflake";
+
         Restart = "once";
       };
     };
