@@ -30,7 +30,28 @@ flake: {
       serviceConfig = {
         ExecStart = "${lib.getBin fpkg}/bin/cflake";
 
-        Restart = "once";
+        Restart = "no";
+        
+        DevicePolicy="closed";
+        KeyringMode="private";
+        LockPersonality="yes";
+        MemoryDenyWriteExecute="yes";
+        NoNewPrivileges="yes";
+        PrivateDevices="yes";
+        PrivateTmp="true";
+        ProtectClock="yes";
+        ProtectControlGroups="yes";
+        ProtectHome="read-only";
+        ProtectHostname="yes";
+        ProtectKernelLogs="yes";
+        ProtectKernelModules="yes";
+        ProtectKernelTunables="yes";
+        ProtectProc="invisible";
+        ProtectSystem="full";
+        RestrictNamespaces="yes";
+        RestrictRealtime="yes";
+        RestrictSUIDSGID="yes";
+        SystemCallArchitectures="native";
       };
     };
   };
