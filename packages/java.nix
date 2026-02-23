@@ -1,0 +1,47 @@
+{pkgs}:
+pkgs.stdenv.mkDerivation rec {
+  pname = "java";
+  version = "1.0.0";
+
+  src = ../src;
+
+  nativeBuildInputs = [pkgs.jdk];
+
+  buildInputs = [pkgs.jdk];
+
+  dontUnpack = false;
+
+  buildPhase = ''
+    runHook preBuild
+
+    mkdir -p build
+
+    javac Java.java -d build
+
+    echo "Main-Class: Java" > manifest.mf
+    jar cmf manifest.mf java.jar -C build .
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+        runHook preInstall
+
+        mkdir -p $out/share/java
+        cp java.jar $out/share/java/
+
+        mkdir -p $out/bin
+        cat > $out/bin/java <<EOF
+    #!/bin/sh
+    exec ${pkgs.jdk}/bin/java -jar $out/share/java/java.jar "\$@"
+    EOF
+        chmod +x $out/bin/java
+
+        runHook postInstall
+  '';
+
+  meta = {
+    description = "A simple Hello World program in Java";
+    mainProgram = "java";
+  };
+}

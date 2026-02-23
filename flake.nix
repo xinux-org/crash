@@ -6,25 +6,27 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
-  outputs =
-    {
-      flake-parts,
-      self,
-      ...
-    }@inputs:
-    flake-parts.lib.mkFlake { inherit inputs; } {
+  outputs = {
+    flake-parts,
+    self,
+    ...
+  } @ inputs:
+    flake-parts.lib.mkFlake {inherit inputs;} {
       systems = [
         "x86_64-linux"
         "aarch64-darwin"
       ];
 
-      flake.nixosModules.CCrashed = import ./modules/crash.nix self;
-      perSystem =
-        { system, pkgs, ... }:
-        {
-          packages.default = pkgs.callPackage ./. { };
+      flake.nixosModules = import ./modules self;
 
-          devShells.default = import ./shell.nix self { inherit pkgs; };
-        };
+      perSystem = {
+        system,
+        pkgs,
+        ...
+      }: {
+        packages = import ./packages {inherit pkgs inputs;};
+
+        devShells.default = import ./shell.nix self {inherit pkgs;};
+      };
     };
 }
