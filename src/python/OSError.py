@@ -1,1 +1,0 @@
-raise OSError('OSError happened')

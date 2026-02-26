@@ -22,9 +22,10 @@
       perSystem = {
         system,
         pkgs,
+        lib,
         ...
       }: {
-        packages = import ./packages {inherit pkgs inputs;};
+        packages = import ./packages {inherit pkgs inputs lib;};
 
         devShells.default = import ./shell.nix self {inherit pkgs;};
       };
