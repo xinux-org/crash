@@ -5,6 +5,8 @@
 }: let
   cp = pkgs.callPackage;
 
+  la = builtins.listToAttrs;
+
   pyFiles = [
     "assertion"
     "attribute"
@@ -57,18 +59,32 @@
     "Unknown"
   ];
 
-  python = builtins.listToAttrs (map (x: {
+  cFiles = [
+    "will_abort"
+    "will_segfault"
+    "will_segfault_in_new_pid"
+    "will_segfault_threads"
+    "will_stackoverflow"
+  ];
+
+  c = la (map (x: {
+      name = x;
+      value = cp ./c {file = "${x}.c";};
+    })
+    cFiles);
+
+  python = la (map (x: {
       name = x;
       value = cp ./python {file = "${x}.py";};
     })
     pyFiles);
 
-  java = builtins.listToAttrs (map (x: {
+  java = la (map (x: {
       name = lib.strings.toLower x;
       value = cp ./java {file = "${x}.java";};
     })
     javaFiles);
 
-  result = python // java;
+  result = python // java // c;
 in
   result

@@ -1,11 +1,14 @@
-{pkgs ? import <nixpkgs> {}}: let
-  lib = pkgs.lib;
+{
+  pkgs,
+  file,
+}: let
+  path = ../../src/c;
 in
   pkgs.llvmPackages.stdenv.mkDerivation {
-    pname = "c-flake";
+    pname = file;
     version = "0.0.1";
 
-    src = ../.;
+    src = path;
 
     nativeBuildInputs = with pkgs; [
       cmake
@@ -13,15 +16,12 @@ in
       llvmPackages.clang-tools
     ];
 
+    installPhase = ''
+      ls -la .
+    '';
+
     cmakeFlags = [
       "-DENABLE_TESTING=OFF"
       "-DENABLE_INSTALL=ON"
     ];
-
-    meta = with lib; {
-      homepage = "c-flake";
-      mainProgram = "cflake";
-      licencse = licenses.wtfpl;
-      platforms = with platforms; linux ++ darwin;
-    };
   }
