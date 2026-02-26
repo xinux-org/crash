@@ -3,14 +3,12 @@
   file,
   ...
 }: let
-  filename = "../../src/python${file}";
+  path = ../../src/python;
 in
   pkgs.stdenv.mkDerivation {
-    pname = "py";
+    pname = file;
     version = "0.1.0";
-    src = filename;
-
-    dontUnpack = true;
+    src = path;
 
     # propagatedBuildInputs = [
     #   (pkgs.python3.withPackages (
@@ -21,18 +19,24 @@ in
     #   ))
     # ];
 
+    # dontUnpack = true;
+
     nativeBuildInputs = with pkgs; [
       # breakpointHook
       # cntr
     ];
 
+    buildInputs = with pkgs; [
+      python3
+    ];
+
     installPhase = ''
       mkdir -p $out/bin
-      cp ${filename} $out/bin/py
-      chmod +x $out/bin/py
+      cp ./${file} $out/bin/main
+      chmod +x $out/bin/main
     '';
 
     patchShebangs = true;
 
-    meta.mainProgram = "py";
+    meta.mainProgram = "main";
   }
