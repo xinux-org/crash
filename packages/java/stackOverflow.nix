@@ -1,9 +1,9 @@
 {pkgs}:
 pkgs.stdenv.mkDerivation rec {
-  pname = "java";
+  pname = "stackOverflow";
   version = "1.0.0";
 
-  src = ../src;
+  src = ../../src/java;
 
   nativeBuildInputs = [pkgs.jdk];
 
@@ -16,9 +16,9 @@ pkgs.stdenv.mkDerivation rec {
 
     mkdir -p build
 
-    javac Java.java -d build
+    javac StackOverflow.java -d build
 
-    echo "Main-Class: Java" > manifest.mf
+    echo "Main-Class: StackOverflow" > manifest.mf
     jar cmf manifest.mf java.jar -C build .
 
     runHook postBuild
