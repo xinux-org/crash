@@ -50,12 +50,25 @@
     "zerodivision"
   ];
 
+  javaFiles = [
+    "Internal"
+    "OutOfMemory"
+    "StackOverflow"
+    "Unknown"
+  ];
+
   python = builtins.listToAttrs (map (x: {
       name = x;
       value = cp ./python {file = "${x}.py";};
     })
     pyFiles);
 
-  result = python;
+  java = builtins.listToAttrs (map (x: {
+      name = lib.strings.toLower x;
+      value = cp ./java {file = "${x}.java";};
+    })
+    javaFiles);
+
+  result = python // java;
 in
   result
