@@ -1,5 +1,5 @@
 {pkgs, ...}: let
-  file = ../src/py.py;
+  file = ../../src/python/AssertionError.py;
 in
   pkgs.stdenv.mkDerivation {
     pname = "py";
