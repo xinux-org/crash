@@ -13,5 +13,7 @@ pkgs.mkShell {
 
     # Extra
     just
+    breakpointHook
+    cntr
   ];
 }

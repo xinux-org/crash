@@ -21,6 +21,11 @@ in
     #   ))
     # ];
 
+    nativeBuildInputs = with pkgs; [
+      # breakpointHook
+      # cntr
+    ];
+
     installPhase = ''
       mkdir -p $out/bin
       cp ${filename} $out/bin/py
