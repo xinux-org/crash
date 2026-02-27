@@ -81,7 +81,7 @@ flake: {
 
   java = la (map (x: {
       name = lib.strings.toLower x;
-      value = import ./java flake {pkg = x;};
+      value = import ./java flake {pkg = lib.strings.toLower x;};
     })
     javaFiles);
 
