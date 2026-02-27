@@ -1,8 +1,7 @@
-flake: {
+flake: {pkg}: {
   config,
   lib,
-  pkgs ? import <nixpkgs> {},
-  pkg,
+  pkgs,
   ...
 }: let
   inherit (lib) mkEnableOption mkOption mkIf mkMerge types;
