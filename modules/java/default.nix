@@ -4,25 +4,27 @@ flake: {pkg}: {
   pkgs,
   ...
 }: let
-  cfg = config.services.${pkg};
+  serviceName = "xinux-${pkg}";
+
+  cfg = config.services.${serviceName};
 
   main = lib.getExe flake.packages.${pkgs.stdenv.hostPlatform.system}.${pkg};
 in {
   options = {
-    services.${pkg} = with lib; {
-      enable = mkEnableOption "${pkg}";
+    services.${serviceName} = with lib; {
+      enable = mkEnableOption "${serviceName}";
 
       user = mkOption {
         type = lib.types.str;
-        default = "java-flake";
-        example = "java-flake";
+        default = "${serviceName}";
+        example = "${serviceName}";
         description = "User for running systemd service as";
       };
 
       group = mkOption {
         type = types.str;
-        default = "java-flake";
-        example = "java-flake";
+        default = "${serviceName}";
+        example = "${serviceName}";
         description = "Group for user of running systemd service as";
       };
 
@@ -35,7 +37,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     users.users.${cfg.user} = {
-      description = "Experimentalus Service User";
+      description = "${serviceName} Service User";
       home = cfg.dataDir;
       useDefaultShell = true;
       inherit (cfg) group;

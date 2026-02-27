@@ -4,6 +4,8 @@ flake: {pkg}: {
   pkgs,
   ...
 }: let
+  serviceName = "xinux-${pkg}";
+
   inherit (lib) mkEnableOption mkOption mkIf mkMerge types;
 
   # Manifest via Cargo.toml
@@ -11,7 +13,7 @@ flake: {pkg}: {
   # manifest = {name = "CCrash";};
 
   # Options
-  cfg = config.services."${pkg}";
+  cfg = config.services.${serviceName};
 
   # Flake shipped default binary
   fpkg = flake.packages.${pkgs.stdenv.hostPlatform.system}.${pkg};
@@ -21,8 +23,8 @@ flake: {pkg}: {
 
   # Systemd services
   service = mkIf cfg.enable {
-    systemd.services."${pkg}" = {
-      description = "${pkg} daemon";
+    systemd.services.${serviceName} = {
+      description = "${serviceName} daemon";
       wantedBy = ["multi-user.target"];
       serviceConfig = {
         ExecStart = "${lib.getBin fpkg}/bin/cflake";

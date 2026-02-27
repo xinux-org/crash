@@ -4,26 +4,28 @@ flake: {pkg}: {
   pkgs,
   ...
 }: let
+  serviceName = "xinux-${pkg}";
+
   # cfg = lib.attrByPath ["services" pkg] {} config;
-  cfg = config.services.${pkg};
+  cfg = config.services.${serviceName};
 
   main = lib.getExe flake.packages.${pkgs.stdenv.hostPlatform.system}.${pkg};
 in {
   options = {
-    services.${pkg} = with lib; {
-      enable = mkEnableOption "${pkg}";
+    services.${serviceName} = with lib; {
+      enable = mkEnableOption "${serviceName}";
 
       user = mkOption {
         type = lib.types.str;
-        default = "py-flake";
-        example = "py-flake";
+        default = "${serviceName}";
+        example = "${serviceName}";
         description = "User for running systemd service as";
       };
 
       group = mkOption {
         type = types.str;
-        default = "py-flake";
-        example = "py-flake";
+        default = "${serviceName}";
+        example = "${serviceName}";
         description = "Group for user of running systemd service as";
       };
 
@@ -36,7 +38,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     users.users.${cfg.user} = {
-      description = "Experimentalus Service User";
+      description = "${serviceName} Service User";
       home = cfg.dataDir;
       useDefaultShell = true;
       inherit (cfg) group;
@@ -45,8 +47,8 @@ in {
 
     users.groups.${cfg.group} = {};
 
-    systemd.services.${pkg} = {
-      description = "Experimentalus server service";
+    systemd.services.${serviceName} = {
+      description = "${serviceName} server service";
       documentation = ["https://google.com"];
 
       wantedBy = ["multi-user.target"];

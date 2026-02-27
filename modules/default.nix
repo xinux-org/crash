@@ -57,19 +57,19 @@ flake: {
     "Unknown"
   ];
 
-  cFiles = [
-    "will_abort"
-    "will_segfault"
-    "will_segfault_in_new_pid"
-    "will_segfault_threads"
-    "will_stackoverflow"
-  ];
+  # cFiles = [
+  #   "will_abort"
+  #   "will_segfault"
+  #   "will_segfault_in_new_pid"
+  #   "will_segfault_threads"
+  #   "will_stackoverflow"
+  # ];
 
-  c = la (map (x: {
-      name = x;
-      value = import ./c flake {pkg = x;};
-    })
-    cFiles);
+  # c = la (map (x: {
+  #     name = x;
+  #     value = import ./c flake {pkg = x;};
+  #   })
+  #   cFiles);
 
   python = la (map (x: {
       name = x;
