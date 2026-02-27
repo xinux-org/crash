@@ -1,10 +1,10 @@
-flake: {
-  pkg,
-  pkgs,
+flake: {pkg}: {
   config,
   lib,
+  pkgs,
   ...
 }: let
+  # cfg = lib.attrByPath ["services" pkg] {} config;
   cfg = config.services.${pkg};
 
   main = lib.getExe flake.packages.${pkgs.stdenv.hostPlatform.system}.${pkg};

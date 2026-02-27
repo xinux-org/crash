@@ -73,7 +73,12 @@ flake: {
 
   python = la (map (x: {
       name = x;
-      value = import ./python flake {pkg = x pkgs lib config;};
+      value = import ./python flake {
+        pkg = x;
+        # pkgs = pkgs;
+        # lib = lib;
+        # config = config;
+      };
     })
     pyFiles);
 
