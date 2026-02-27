@@ -1,8 +1,8 @@
 flake: {
+  pkg,
+  pkgs,
   config,
   lib,
-  pkgs,
-  pkg,
   ...
 }: let
   cfg = config.services.${pkg};

@@ -11,13 +11,18 @@
     self,
     ...
   } @ inputs:
-    flake-parts.lib.mkFlake {inherit inputs;} {
+    flake-parts.lib.mkFlake {inherit inputs;} (top @ {
+      pkgs,
+      config,
+      lib,
+      ...
+    }: {
       systems = [
         "x86_64-linux"
         "aarch64-darwin"
       ];
 
-      flake.nixosModules = import ./modules self;
+      flake.nixosModules = import ./modules self {inherit pkgs config lib;};
 
       perSystem = {
         system,
@@ -29,5 +34,5 @@
 
         devShells.default = import ./shell.nix self {inherit pkgs;};
       };
-    };
+    });
 }

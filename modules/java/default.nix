@@ -1,7 +1,7 @@
 flake: {
   config,
   lib,
-  pkgs,
+  pkgs ? import <nixpkgs> {},
   pkg,
   ...
 }: let

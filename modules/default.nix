@@ -1,4 +1,8 @@
-flake: let
+flake: {
+  pkgs,
+  config,
+  lib,
+}: let
   la = builtins.listToAttrs;
 
   pyFiles = [
@@ -63,19 +67,19 @@ flake: let
 
   c = la (map (x: {
       name = x;
-      value = import ./c flake {pkg = x;};
+      value = import ./c flake {pkg = x pkgs lib config;};
     })
     cFiles);
 
   python = la (map (x: {
       name = x;
-      value = import ./python flake {pkg = x;};
+      value = import ./python flake {pkg = x pkgs lib config;};
     })
     pyFiles);
 
   java = la (map (x: {
       name = x;
-      value = import ./java flake {pkg = x;};
+      value = import ./java flake {pkg = x pkgs lib config;};
     })
     javaFiles);
 
