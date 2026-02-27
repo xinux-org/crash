@@ -67,7 +67,7 @@ flake: {
 
   c = la (map (x: {
       name = x;
-      value = import ./c flake {pkg = x pkgs lib config;};
+      value = import ./c flake {pkg = x;};
     })
     cFiles);
 
@@ -75,16 +75,13 @@ flake: {
       name = x;
       value = import ./python flake {
         pkg = x;
-        # pkgs = pkgs;
-        # lib = lib;
-        # config = config;
       };
     })
     pyFiles);
 
   java = la (map (x: {
       name = x;
-      value = import ./java flake {pkg = x pkgs lib config;};
+      value = import ./java flake {pkg = x;};
     })
     javaFiles);
 
