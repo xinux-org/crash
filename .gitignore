@@ -20,3 +20,5 @@ logfile
 .direnv
 
 build/
+
+crashlist.txt
