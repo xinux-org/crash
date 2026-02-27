@@ -2,27 +2,28 @@ flake: {
   config,
   lib,
   pkgs,
+  pkg,
   ...
 }: let
-  cfg = config.services.java-flake;
+  cfg = config.services.${pkg};
 
-  main = lib.getExe flake.packages.${pkgs.stdenv.hostPlatform.system}.java;
+  main = lib.getExe flake.packages.${pkgs.stdenv.hostPlatform.system}.${pkg};
 in {
   options = {
-    services.java-flake = with lib; {
-      enable = mkEnableOption "java-flake";
+    services.${pkg} = with lib; {
+      enable = mkEnableOption "${pkg}";
 
       user = mkOption {
         type = lib.types.str;
-        default = "java-flake";
-        example = "java-flake";
+        default = "py-flake";
+        example = "py-flake";
         description = "User for running systemd service as";
       };
 
       group = mkOption {
         type = types.str;
-        default = "java-flake";
-        example = "java-flake";
+        default = "py-flake";
+        example = "py-flake";
         description = "Group for user of running systemd service as";
       };
 
@@ -44,7 +45,7 @@ in {
 
     users.groups.${cfg.group} = {};
 
-    systemd.services.java-flake = {
+    systemd.services.${pkg} = {
       description = "Experimentalus server service";
       documentation = ["https://google.com"];
 
