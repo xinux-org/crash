@@ -5,71 +5,7 @@ flake: {
 }: let
   la = builtins.listToAttrs;
 
-  pyFiles = [
-    "assertion"
-    "attribute"
-    "blockingio"
-    "brokenpipe"
-    "childprocess"
-    "connection"
-    "environment"
-    "fileexists"
-    "filenotfound"
-    "floatingpoint"
-    "generatorexit"
-    "import"
-    "indentation"
-    "io"
-    "isadirectory"
-    "key"
-    "keyboardinterrupt"
-    "memory"
-    "modulenotfound"
-    "name"
-    "notadirectory"
-    "notimplemented"
-    "os"
-    "overflow"
-    "permission"
-    "processlookup"
-    "pythonfinalization"
-    "recursion"
-    "reference"
-    "runtime"
-    "stopasynciteration"
-    "stopiteration"
-    "syntax"
-    "system"
-    "systemexit"
-    "tab"
-    "timeout"
-    "type"
-    "unboundlocal"
-    "unicode"
-    "value"
-    "zerodivision"
-  ];
-
-  javaFiles = [
-    "Internal"
-    "OutOfMemory"
-    "StackOverflow"
-    "Unknown"
-  ];
-
-  # cFiles = [
-  #   "will_abort"
-  #   "will_segfault"
-  #   "will_segfault_in_new_pid"
-  #   "will_segfault_threads"
-  #   "will_stackoverflow"
-  # ];
-
-  # c = la (map (x: {
-  #     name = x;
-  #     value = import ./c flake {pkg = x;};
-  #   })
-  #   cFiles);
+  pyFiles = map (x: lib.strings.removeSuffix ".py" x.name) (builtins.filter (x: x.value == "regular") (lib.attrsToList (builtins.readDir ../src/python)));
 
   python = la (map (x: {
       name = x;
@@ -79,12 +15,14 @@ flake: {
     })
     pyFiles);
 
+  javaFiles = map (x: lib.strings.removeSuffix ".java" x.name) (builtins.filter (x: x.value == "regular") (lib.attrsToList (builtins.readDir ../src/java)));
+
   java = la (map (x: {
       name = lib.strings.toLower x;
       value = import ./java flake {pkg = lib.strings.toLower x;};
     })
     javaFiles);
 
-  result = python // java // c;
+  result = python // java;
 in
   result
