@@ -1,15 +1,14 @@
-{
-  pkgs,
-  file,
-}: let
+file: {pkgs}: let
   path = ../../src/java;
 
-  class = lib.strings.removeSuffix ".java" file;
+  name = "${file.name}.java";
+
+  class = lib.strings.removeSuffix ".java" name;
 
   lib = pkgs.lib;
 in
   pkgs.stdenv.mkDerivation rec {
-    pname = file;
+    pname = name;
     version = "1.0.0";
 
     src = path;
@@ -21,11 +20,12 @@ in
     dontUnpack = false;
 
     buildPhase = ''
+      echo ${name}
       runHook preBuild
 
       mkdir -p build
 
-      javac ${file} -d build
+      javac ${name} -d build
 
       echo "Main-Class: ${class}" > manifest.mf
       jar cmf manifest.mf java.jar -C build .

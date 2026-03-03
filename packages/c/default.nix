@@ -1,11 +1,10 @@
-{
-  pkgs,
-  file,
-}: let
+file: {pkgs}: let
   path = ../../src/c;
+
+  name = "${file.name}.c";
 in
-  pkgs.llvmPackages.stdenv.mkDerivation {
-    pname = file;
+  pkgs.stdenv.mkDerivation {
+    pname = name;
     version = "0.0.1";
 
     src = path;
@@ -16,12 +15,14 @@ in
       llvmPackages.clang-tools
     ];
 
-    installPhase = ''
-      ls -la .
+    buildPhase = ''
+      gcc ${path}/${name} -o main
     '';
 
-    cmakeFlags = [
-      "-DENABLE_TESTING=OFF"
-      "-DENABLE_INSTALL=ON"
-    ];
+    installPhase = ''
+      mkdir -p $out/bin
+      cp main $out/bin/main
+    '';
+
+    meta.mainProgram = "main";
   }

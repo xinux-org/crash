@@ -23,6 +23,15 @@ flake: {
     })
     javaFiles);
 
-  result = python // java;
+
+  cFiles = map (x: lib.strings.removeSuffix ".c" x.name) (builtins.filter (x: x.value == "regular") (lib.attrsToList (builtins.readDir ../src/c)));
+
+  c = la (map (x: {
+      name = lib.strings.toLower x;
+      value = import ./c flake {pkg = lib.strings.toLower x;};
+    })
+    cFiles);
+
+  result = python // java // c;
 in
   result

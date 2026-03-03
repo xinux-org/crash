@@ -1,12 +1,10 @@
-{
-  pkgs,
-  file,
-  ...
-}: let
+file: {pkgs, ...}: let
   path = ../../src/python;
+
+  name = "${file.name}.py";
 in
   pkgs.stdenv.mkDerivation {
-    pname = file;
+    pname = name;
     version = "0.1.0";
     src = path;
 
@@ -32,7 +30,7 @@ in
 
     installPhase = ''
       mkdir -p $out/bin
-      cp ./${file} $out/bin/main
+      cp ./${name} $out/bin/main
       chmod +x $out/bin/main
     '';
 

@@ -7,83 +7,29 @@
 
   la = builtins.listToAttrs;
 
-  pyFiles = [
-    "assertion"
-    "attribute"
-    "blockingio"
-    "brokenpipe"
-    "childprocess"
-    "connection"
-    "environment"
-    "fileexists"
-    "filenotfound"
-    "floatingpoint"
-    "generatorexit"
-    "import"
-    "indentation"
-    "io"
-    "isadirectory"
-    "key"
-    "keyboardinterrupt"
-    "memory"
-    "modulenotfound"
-    "name"
-    "notadirectory"
-    "notimplemented"
-    "os"
-    "overflow"
-    "permission"
-    "processlookup"
-    "pythonfinalization"
-    "recursion"
-    "reference"
-    "runtime"
-    "stopasynciteration"
-    "stopiteration"
-    "syntax"
-    "system"
-    "systemexit"
-    "tab"
-    "timeout"
-    "type"
-    "unboundlocal"
-    "unicode"
-    "value"
-    "zerodivision"
-  ];
-
-  javaFiles = [
-    "Internal"
-    "OutOfMemory"
-    "StackOverflow"
-    "Unknown"
-  ];
-
-  cFiles = [
-    "will_abort"
-    "will_segfault"
-    "will_segfault_in_new_pid"
-    "will_segfault_threads"
-    "will_stackoverflow"
-  ];
-
-  c = la (map (x: {
-      name = x;
-      value = cp ./c {file = "${x}.c";};
-    })
-    cFiles);
+  pyFiles = map (x: lib.strings.removeSuffix ".py" x.name) (builtins.filter (x: x.value == "regular" && lib.strings.hasSuffix ".py" x.name) (lib.attrsToList (builtins.readDir ../src/python)));
 
   python = la (map (x: {
+      value = cp ./python {name = x;} {inherit pkgs;};
       name = x;
-      value = cp ./python {file = "${x}.py";};
     })
     pyFiles);
 
+  javaFiles = map (x: lib.strings.removeSuffix ".java" x.name) (builtins.filter (x: x.value == "regular" && lib.strings.hasSuffix ".java" x.name) (lib.attrsToList (builtins.readDir ../src/java)));
+
   java = la (map (x: {
+      value = cp ./java {name = x;} {inherit pkgs;};
       name = lib.strings.toLower x;
-      value = cp ./java {file = "${x}.java";};
     })
     javaFiles);
+
+  cFiles = map (x: lib.strings.removeSuffix ".c" x.name) (builtins.filter (x: x.value == "regular" && lib.strings.hasSuffix ".c" x.name) (lib.attrsToList (builtins.readDir ../src/c)));
+
+  c = la (map (x: {
+      value = cp ./c {name = x;} {inherit pkgs;};
+      name = x;
+    })
+    cFiles);
 
   result = python // java // c;
 in
