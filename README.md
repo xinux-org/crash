@@ -1,6 +1,6 @@
 # Crash
 
-This program is intended to test errors/exceptions in [xinux-org/relago](https://github.com/xinux-org/relago)
+This program is intended to use to test errors/exceptions in [xinux-org/relago](https://github.com/xinux-org/relago)
 
 ## Getting Started
 
