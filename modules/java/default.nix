@@ -4,7 +4,7 @@ flake: {pkg}: {
   pkgs,
   ...
 }: let
-  serviceName = "xinux-${pkg}";
+  serviceName = "xinux-java-${pkg}";
 
   cfg = config.services.${serviceName};
 

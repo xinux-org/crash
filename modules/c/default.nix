@@ -4,7 +4,7 @@ flake: {pkg}: {
   pkgs,
   ...
 }: let
-  serviceName = "xinux-${pkg}";
+  serviceName = "xinux-c-${pkg}";
 
   inherit (lib) mkEnableOption;
 

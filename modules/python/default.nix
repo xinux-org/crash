@@ -4,7 +4,7 @@ flake: {pkg}: {
   pkgs,
   ...
 }: let
-  serviceName = "xinux-${pkg}";
+  serviceName = "xinux-py-${pkg}";
 
   # cfg = lib.attrByPath ["services" pkg] {} config;
   cfg = config.services.${serviceName};
