@@ -5,7 +5,7 @@ flake: {
 }: let
   la = builtins.listToAttrs;
 
-  pyFiles = map (x: lib.strings.removeSuffix ".py" x.name) (builtins.filter (x: x.value == "regular") (lib.attrsToList (builtins.readDir ../src/python)));
+  pyFiles = map (x: lib.strings.removeSuffix ".py" x.name) (builtins.filter (x: x.value == "regular" && lib.strings.hasSuffix ".py" x.name) (lib.attrsToList (builtins.readDir ../src/python)));
 
   python = la (map (x: {
       name = x;
@@ -15,7 +15,7 @@ flake: {
     })
     pyFiles);
 
-  javaFiles = map (x: lib.strings.removeSuffix ".java" x.name) (builtins.filter (x: x.value == "regular") (lib.attrsToList (builtins.readDir ../src/java)));
+  javaFiles = map (x: lib.strings.removeSuffix ".java" x.name) (builtins.filter (x: x.value == "regular" && lib.strings.hasSuffix ".java" x.name) (lib.attrsToList (builtins.readDir ../src/java)));
 
   java = la (map (x: {
       name = lib.strings.toLower x;
@@ -23,8 +23,7 @@ flake: {
     })
     javaFiles);
 
-
-  cFiles = map (x: lib.strings.removeSuffix ".c" x.name) (builtins.filter (x: x.value == "regular") (lib.attrsToList (builtins.readDir ../src/c)));
+  cFiles = map (x: lib.strings.removeSuffix ".c" x.name) (builtins.filter (x: x.value == "regular" && lib.strings.hasSuffix ".c" x.name) (lib.attrsToList (builtins.readDir ../src/c)));
 
   c = la (map (x: {
       name = lib.strings.toLower x;

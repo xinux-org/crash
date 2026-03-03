@@ -6,63 +6,61 @@ flake: {pkg}: {
 }: let
   serviceName = "xinux-${pkg}";
 
-  inherit (lib) mkEnableOption mkOption mkIf mkMerge types;
+  inherit (lib) mkEnableOption;
 
-  # Manifest via Cargo.toml
-  # manifest = (pkgs.lib.importTOML ./Cargo.toml).workspace.package;
-  # manifest = {name = "CCrash";};
-
-  # Options
   cfg = config.services.${serviceName};
 
-  # Flake shipped default binary
-  fpkg = flake.packages.${pkgs.stdenv.hostPlatform.system}.${pkg};
+  main = lib.getExe flake.packages.${pkgs.stdenv.hostPlatform.system}.${pkg};
+in {
+  options = {
+    services.${serviceName} = with lib; {
+      enable = mkEnableOption "${serviceName}";
 
-  # Toml management
-  # toml = pkgs.formats.toml {};
+      user = mkOption {
+        type = lib.types.str;
+        default = "${serviceName}";
+        example = "${serviceName}";
+        description = "User for running systemd service as";
+      };
 
-  # Systemd services
-  service = mkIf cfg.enable {
-    systemd.services.${serviceName} = {
-      description = "${serviceName} daemon";
-      wantedBy = ["multi-user.target"];
-      serviceConfig = {
-        ExecStart = "${lib.getBin fpkg}/bin/cflake";
+      group = mkOption {
+        type = types.str;
+        default = "${serviceName}";
+        example = "${serviceName}";
+        description = "Group for user of running systemd service as";
+      };
 
-        Restart = "no";
-
-        DevicePolicy = "closed";
-        KeyringMode = "private";
-        LockPersonality = "yes";
-        MemoryDenyWriteExecute = "yes";
-        NoNewPrivileges = "yes";
-        PrivateDevices = "yes";
-        PrivateTmp = "true";
-        ProtectClock = "yes";
-        ProtectControlGroups = "yes";
-        ProtectHome = "read-only";
-        ProtectHostname = "yes";
-        ProtectKernelLogs = "yes";
-        ProtectKernelModules = "yes";
-        ProtectKernelTunables = "yes";
-        ProtectProc = "invisible";
-        ProtectSystem = "full";
-        RestrictNamespaces = "yes";
-        RestrictRealtime = "yes";
-        RestrictSUIDSGID = "yes";
-        SystemCallArchitectures = "native";
+      dataDir = mkOption {
+        type = types.str;
+        default = "/var/lib/expius";
       };
     };
   };
-in {
-  # Available user options
-  options = with lib; {
-    services.${pkg} = {
-      enable = mkEnableOption ''
-        ${pkg}, C must crash.
-      '';
+
+  config = lib.mkIf cfg.enable {
+    users.users.${cfg.user} = {
+      description = "${serviceName} Service User";
+      home = cfg.dataDir;
+      useDefaultShell = true;
+      inherit (cfg) group;
+      isSystemUser = true;
+    };
+
+    users.groups.${cfg.group} = {};
+
+    systemd.services.${serviceName} = {
+      description = "${serviceName} server service";
+      documentation = ["https://google.com"];
+
+      wantedBy = ["multi-user.target"];
+
+      serviceConfig = {
+        User = cfg.user;
+        Group = cfg.group;
+        ExecStart = "${main}";
+        StateDirectory = cfg.user;
+        StateDirectoryMode = "0750";
+      };
     };
   };
-
-  config = mkMerge [service];
 }
