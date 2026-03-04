@@ -26,10 +26,14 @@ inputs.crash.url = "github:xinux-org/crash" # Firstly, we'll import our flake in
 # configuration.nix
 imports =
     [
-      inputs.crash.nixosModules.segfault
+      inputs.crash.nixosModules.xinux-c-segfault # C
+      inputs.crash.nixosModules.xinux-py-assertion # Python
+      inputs.crash.nixosModules.xinux-java-internal # Java
     ]; # Here, we're importing exact module to use in our config.
 
-  services.xinux-segfault.enable = true; # This enables that module in your configuration
+  services.xinux-c-segfault.enable = true; # This enables xinux-c-segfault module in your configuration
+  services.xinux-py-assertion.enable = true; # This enables xinux-py-segfault module in your configuration
+  services.xinux-java-internal.enable = true; # This enables xinux-java-internal module in your configuration
 ```
 
 ## Reminder:
