@@ -38,4 +38,4 @@ imports =
 
 ## Reminder:
 
-Always run with file name: `nix run .#filename`. But when you want to enable service, always add `xinux-` prefix to your filename: `xinux-<filename>`.
+Always run with file name: `nix run .#filename`. But when you want to enable service, always add `xinux-<lang>-` prefix to your filename: `xinux-<lang>-<filename>`.
